@@ -163,10 +163,10 @@ async function detectDeviceTier(): Promise<DeviceTier> {
   // Memory (if available via performance API)
   let memoryScore = 1;
   if (
-    //@ts-ignore - jsMemoryEstimate may not be available in all browsers
+    // @ts-expect-error - jsMemoryEstimate may not be available in all browsers
     performance && performance.memory && performance.memory.jsHeapSizeLimit
   ) {
-    //@ts-ignore
+    // @ts-expect-error - accessing non-standard browser API
     const memoryMB = performance.memory.jsHeapSizeLimit / (1024 * 1024);
     if (memoryMB > 2048) memoryScore = 3;
     else if (memoryMB > 1024) memoryScore = 2;
@@ -175,7 +175,7 @@ async function detectDeviceTier(): Promise<DeviceTier> {
   // Network speed (rough estimate)
   let networkScore = 2;
   if (navigator.connection) {
-    //@ts-ignore - connection API may not be available in all browsers
+    // @ts-expect-error - connection API may not be available in all browsers
     const connection = navigator.connection;
     if (connection.effectiveType === '4g') networkScore = 3;
     else if (connection.effectiveType === '3g') networkScore = 2;
@@ -277,7 +277,7 @@ async function executeInWebWorker<T, R>(
       // For simplicity in this implementation, we'll fall back to direct execution
       // In a real implementation, you would create a worker and transfer the calculation
       calculationFn(input, options).then(resolve).catch(reject);
-    } catch (error) {
+    } catch {
       // Fall back to direct execution if worker fails
       calculationFn(input, options).then(resolve).catch(reject);
     }
@@ -324,7 +324,12 @@ function generateCacheKey<T>(input: T, options: FluidComputeOptions): string {
     'isSalaried' in input
   ) {
     // For tax calculations, include key parameters in the cache key
-    const { income, deductions, regime, isSalaried } = input as any;
+    const { income, deductions, regime, isSalaried } = input as {
+      income: number;
+      deductions: number;
+      regime: string;
+      isSalaried: boolean;
+    };
     return `tax_${income}_${deductions}_${regime}_${isSalaried}_${options.precision}`;
   }
   
@@ -367,7 +372,7 @@ export function formatWithAdaptivePrecision(
 /**
  * Calculation cache to avoid redundant computations
  */
-const cache = new Map<string, any>();
+const cache = new Map<string, unknown>();
 
 /**
  * Clears the calculation cache

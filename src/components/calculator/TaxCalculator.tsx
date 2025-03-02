@@ -25,6 +25,15 @@ interface TaxResult {
   standardDeduction?: number;
 }
 
+interface OptimizationSuggestion {
+  id: string;
+  title: string;
+  description: string;
+  potentialSaving: number;
+  applicability: number;
+  complexity: number;
+}
+
 const TaxCalculator = () => {
   const { t } = useTranslation('common');
   const { preferences, saveCalculation } = useUserPreferences();
@@ -39,7 +48,7 @@ const TaxCalculator = () => {
   const [result, setResult] = useState<TaxResult | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [calculationProgress, setCalculationProgress] = useState(0);
-  const [optimizationSuggestions, setOptimizationSuggestions] = useState<any[]>([]);
+  const [optimizationSuggestions, setOptimizationSuggestions] = useState<OptimizationSuggestion[]>([]);
   const [showOptimizations, setShowOptimizations] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,18 +1,9 @@
 /**
  * Tax Optimizer Utility
  * 
- * This utility provides functions for analyzing tax calculations and generating
- * optimization suggestions to help users minimize their tax liability.
+ * This utility analyzes tax calculation results to generate optimization suggestions,
+ * compare tax liability between old and new regimes, and calculate potential savings.
  */
-
-interface TaxResult {
-  taxableIncome: number;
-  incomeTax: number;
-  cess: number;
-  surcharge: number;
-  totalTax: number;
-  effectiveRate: number;
-}
 
 interface TaxInput {
   income: number;
@@ -30,15 +21,25 @@ interface OptimizationSuggestion {
   complexity: number; // 0-100 score
 }
 
+interface TaxResult {
+  taxableIncome: number;
+  incomeTax: number;
+  cess: number;
+  surcharge: number;
+  totalTax: number;
+  effectiveRate: number;
+  standardDeduction?: number;
+}
+
 /**
- * Analyzes tax calculation results and generates optimization suggestions
- * @param taxInput Original tax input parameters
- * @param taxResult Calculated tax result
+ * Generates tax optimization suggestions based on the user's tax input and calculated result
+ * @param taxInput The user's tax input data
+ * @param taxResult The calculated tax result
  * @returns Array of optimization suggestions
  */
 export async function generateOptimizationSuggestions(
   taxInput: TaxInput,
-  taxResult: any
+  taxResult: TaxResult
 ): Promise<OptimizationSuggestion[]> {
   const suggestions: OptimizationSuggestion[] = [];
   const { income, deductions, regime, isSalaried } = taxInput;
