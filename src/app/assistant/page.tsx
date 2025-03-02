@@ -1,15 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FiMessageSquare, FiInfo } from 'react-icons/fi';
 import TaxAssistant from '@/components/assistant/TaxAssistant';
-import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 
 export default function AssistantPage() {
-  const { t } = useTranslation('common');
-  const { preferences } = useUserPreferences();
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-6">

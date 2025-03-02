@@ -2,11 +2,9 @@
 
 import { useTranslation } from 'react-i18next';
 import { FiInfo, FiUsers, FiTarget, FiHeart } from 'react-icons/fi';
-import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 
 export default function AboutPage() {
   const { t } = useTranslation('common');
-  const { preferences } = useUserPreferences();
 
   return (
     <div className="container mx-auto px-4 py-8">
