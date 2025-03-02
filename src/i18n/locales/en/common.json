@@ -1,0 +1,31 @@
+{
+  "appName": "OpenTax",
+  "tagline": "AI-powered tax advisory for Indian citizens",
+  "loading": "Loading...",
+  "save": "Save",
+  "cancel": "Cancel",
+  "close": "Close",
+  "back": "Back",
+  "next": "Next",
+  "submit": "Submit",
+  "reset": "Reset",
+  "help": "Help",
+  "donate": "Donate",
+  "language": "Language",
+  "donationBar": {
+    "message": "OpenTax is an open source project. If you find it helpful, please consider supporting us.",
+    "action": "Donate Now",
+    "dismiss": "Dismiss notification"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "tabs": {
+      "taxCalculator": "Tax Calculator",
+      "aiAssistant": "AI Assistant",
+      "documentManager": "Document Manager",
+      "updatesPanel": "Regulatory Updates"
+    },
+    "welcomeMessage": "Welcome to OpenTax! Select a tab to get started.",
+    "helpText": "Need help? Check our FAQ or contact support."
+  }
+}

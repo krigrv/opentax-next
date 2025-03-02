@@ -1,0 +1,28 @@
+{
+  "title": "AI Tax Assistant",
+  "description": "Ask questions about tax laws, deductions, and filing procedures",
+  "placeholder": "Ask a question about taxes...",
+  "send": "Send",
+  "typing": "AI is typing...",
+  "welcomeMessage": "Hello! I'm your AI tax assistant. How can I help you with your tax-related questions?",
+  "examples": {
+    "title": "Example questions",
+    "questions": [
+      "What are the tax slabs for FY 2023-24?",
+      "How do I claim HRA exemption?",
+      "What documents do I need for ITR filing?",
+      "Explain Section 80C deductions",
+      "What is the difference between old and new tax regimes?"
+    ]
+  },
+  "feedback": {
+    "helpful": "Was this helpful?",
+    "yes": "Yes",
+    "no": "No",
+    "thanks": "Thanks for your feedback!"
+  },
+  "errors": {
+    "failed": "Failed to get a response. Please try again.",
+    "network": "Network error. Please check your connection."
+  }
+}

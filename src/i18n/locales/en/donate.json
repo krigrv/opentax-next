@@ -1,0 +1,31 @@
+{
+  "title": "Support OpenTax",
+  "subtitle": "Help us keep this platform free and accessible",
+  "description": "OpenTax is a community-driven project that relies on donations to maintain and improve our services. Your contribution helps us provide free tax advisory to everyone.",
+  "close": "Close",
+  "proceed": "Proceed to Donate",
+  "options": {
+    "card": {
+      "title": "Credit/Debit Card",
+      "description": "Make a secure payment using your credit or debit card"
+    },
+    "upi": {
+      "title": "UPI Payment",
+      "description": "Quick and easy payment using any UPI app"
+    },
+    "other": {
+      "title": "Other Ways to Support",
+      "description": "Contribute code, documentation, or spread the word"
+    }
+  },
+  "amount": {
+    "title": "Select Amount",
+    "custom": "Custom Amount",
+    "currency": "₹"
+  },
+  "thankyou": {
+    "title": "Thank You for Your Support!",
+    "message": "Your contribution helps us maintain and improve OpenTax for everyone.",
+    "receipt": "A receipt has been sent to your email."
+  }
+}

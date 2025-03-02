@@ -1,0 +1,53 @@
+{
+  "title": "Income Tax Calculator",
+  "description": "Calculate your income tax liability for the financial year",
+  "financialYear": "Financial Year",
+  "calculate": "Calculate Tax",
+  "income": {
+    "title": "Income Details",
+    "salary": "Salary Income",
+    "otherIncome": "Other Income",
+    "totalIncome": "Total Income"
+  },
+  "personalDetails": {
+    "title": "Personal Details",
+    "age": "Age",
+    "regime": "Tax Regime",
+    "regimeNew": "New Regime",
+    "regimeOld": "Old Regime"
+  },
+  "deductions": {
+    "title": "Deductions",
+    "add": "Add Deduction",
+    "remove": "Remove",
+    "type": "Deduction Type",
+    "amount": "Amount",
+    "description": "Description",
+    "total": "Total Deductions",
+    "types": {
+      "80C": "Section 80C (PF, LIC, etc.)",
+      "80D": "Section 80D (Health Insurance)",
+      "80G": "Section 80G (Donations)",
+      "HRA": "House Rent Allowance",
+      "other": "Other Deductions"
+    }
+  },
+  "results": {
+    "title": "Tax Breakdown",
+    "totalIncome": "Total Income",
+    "taxableIncome": "Taxable Income",
+    "basicTax": "Basic Tax",
+    "cess": "Health & Education Cess (4%)",
+    "totalTax": "Total Tax Liability",
+    "effectiveRate": "Effective Tax Rate",
+    "slabs": "Tax Slabs",
+    "slabRange": "₹{{start}} to ₹{{end}}",
+    "slabRatePercent": "{{rate}}%",
+    "slabTaxAmount": "₹{{amount}}",
+    "downloadPdf": "Download PDF",
+    "saveResults": "Save Results"
+  },
+  "errors": {
+    "calculation": "Error calculating tax. Please check your inputs and try again."
+  }
+}
