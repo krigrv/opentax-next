@@ -28,6 +28,10 @@
   "cookie_policy": "Cookie Policy",
   "all_rights_reserved": "All rights reserved",
   "total_income": "Total Income",
+  "gross_income": "Gross Income",
+  "standard_deduction": "Standard Deduction",
+  "other_deductions": "Other Deductions",
+  "is_salaried_employee": "I am a salaried employee",
   "total_deductions": "Total Deductions",
   "tax_regime": "Tax Regime",
   "old_regime": "Old Regime",
@@ -200,5 +204,19 @@
   "update_description_4": "In a landmark judgment, the Supreme Court has ruled that HRA exemption can be claimed by both husband and wife if they are joint owners of a property and pay rent to each other. The court clarified that such arrangements are valid if supported by proper documentation and genuine transactions.",
   
   "update_title_5": "GST Council Reduces Rates on Essential Medical Supplies",
-  "update_description_5": "The GST Council has announced a reduction in GST rates for essential medical supplies and equipment. The rate for specified medical devices has been reduced from 12% to 5%, and certain life-saving drugs have been moved to the nil rate category. These changes will be effective from April 1, 2025."
+  "update_description_5": "The GST Council has announced a reduction in GST rates for essential medical supplies and equipment. The rate for specified medical devices has been reduced from 12% to 5%, and certain life-saving drugs have been moved to the nil rate category. These changes will be effective from April 1, 2025.",
+  
+  "income": "Income",
+  "deductions": "Deductions",
+  "tax_optimization_suggestions": "Tax Optimization Suggestions",
+  "potential_saving": "Potential Saving",
+  "complexity": "Complexity",
+  "applicability": "Applicability",
+  "switch_to_new_regime": "Consider New Tax Regime",
+  "switch_to_old_regime": "Consider Old Tax Regime",
+  "maximize_80c": "Maximize Section 80C Investments",
+  "nps_investment": "Invest in National Pension System",
+  "home_loan_interest": "Home Loan Interest Deduction",
+  "health_insurance": "Health Insurance Premium Deduction",
+  "salary_restructure": "Optimize Salary Structure"
 }
