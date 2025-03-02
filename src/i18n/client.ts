@@ -9,16 +9,18 @@ import { getOptions } from './settings';
 import enCommon from './locales/en/common.json';
 import enTaxCalculator from './locales/en/taxCalculator.json';
 import enAiAssistant from './locales/en/aiAssistant.json';
-import enDocuments from './locales/en/documents.json';
-import enUpdates from './locales/en/updates.json';
+import enDocumentManager from './locales/en/documentManager.json';
+import enUpdatesPanel from './locales/en/updatesPanel.json';
 import enDonate from './locales/en/donate.json';
+import enAuth from './locales/en/auth.json';
 
 import hiCommon from './locales/hi/common.json';
 import hiTaxCalculator from './locales/hi/taxCalculator.json';
 import hiAiAssistant from './locales/hi/aiAssistant.json';
-import hiDocuments from './locales/hi/documents.json';
-import hiUpdates from './locales/hi/updates.json';
+import hiDocumentManager from './locales/hi/documentManager.json';
+import hiUpdatesPanel from './locales/hi/updatesPanel.json';
 import hiDonate from './locales/hi/donate.json';
+import hiAuth from './locales/hi/auth.json';
 
 // Initialize i18next for client-side
 i18next
@@ -31,17 +33,19 @@ i18next
         common: enCommon,
         taxCalculator: enTaxCalculator,
         aiAssistant: enAiAssistant,
-        documents: enDocuments,
-        updates: enUpdates,
+        documentManager: enDocumentManager,
+        updatesPanel: enUpdatesPanel,
         donate: enDonate,
+        auth: enAuth
       },
       hi: {
         common: hiCommon,
         taxCalculator: hiTaxCalculator,
         aiAssistant: hiAiAssistant,
-        documents: hiDocuments,
-        updates: hiUpdates,
+        documentManager: hiDocumentManager,
+        updatesPanel: hiUpdatesPanel,
         donate: hiDonate,
+        auth: hiAuth
       },
     },
     detection: {

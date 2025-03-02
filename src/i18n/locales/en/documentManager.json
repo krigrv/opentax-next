@@ -1,0 +1,45 @@
+{
+  "title": "Document Manager",
+  "description": "Upload, organize, and manage your tax-related documents",
+  "uploadButton": "Upload Files",
+  "deleteButton": "Delete Selected",
+  "searchPlaceholder": "Search documents...",
+  "dragAndDrop": "Drag and drop files here, or click to browse",
+  "dropHere": "Drop files here to upload",
+  "supportedFormats": "Supports PDF, JPG, PNG, DOC, XLS files",
+  "noDocuments": "No documents found. Upload some files to get started.",
+  
+  "categories": {
+    "all": "All Categories",
+    "income": "Income",
+    "investment": "Investment",
+    "property": "Property",
+    "other": "Other"
+  },
+  
+  "viewModes": {
+    "grid": "Grid View",
+    "list": "List View"
+  },
+  
+  "actions": {
+    "view": "View Document",
+    "download": "Download",
+    "delete": "Delete",
+    "rename": "Rename",
+    "share": "Share",
+    "categorize": "Change Category"
+  },
+  
+  "confirmations": {
+    "delete": "Are you sure you want to delete this document?",
+    "deleteMultiple": "Are you sure you want to delete {{count}} documents?"
+  },
+  
+  "notifications": {
+    "uploadSuccess": "Files uploaded successfully",
+    "uploadError": "Error uploading files",
+    "deleteSuccess": "Document deleted successfully",
+    "deleteError": "Error deleting document"
+  }
+}

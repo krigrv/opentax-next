@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import DonationNotificationBar from "@/components/common/DonationNotificationBar";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,13 +19,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
           <DonationNotificationBar />
-          <div className="min-h-screen bg-gray-50">
-            {children}
+          <Header />
+          <div className="min-h-screen bg-[hsl(var(--background))] pt-16">
+            <main className="container mx-auto px-4 py-8">
+              {children}
+            </main>
           </div>
+          <Footer />
         </Providers>
       </body>
     </html>

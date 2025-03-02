@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { FiMessageSquare, FiCalculator, FiFileText, FiRefreshCw } from 'react-icons/fi';
+import { FiMessageSquare, FiDollarSign, FiFileText, FiRefreshCw } from 'react-icons/fi';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const DashboardTabs = () => {
@@ -15,7 +15,7 @@ const DashboardTabs = () => {
 
   // Tab configuration
   const tabs = [
-    { id: 'calculator', label: t('dashboard.tabs.taxCalculator'), icon: <FiCalculator /> },
+    { id: 'calculator', label: t('dashboard.tabs.taxCalculator'), icon: <FiDollarSign /> },
     { id: 'assistant', label: t('dashboard.tabs.aiAssistant'), icon: <FiMessageSquare /> },
     { id: 'documents', label: t('dashboard.tabs.documentManager'), icon: <FiFileText /> },
     { id: 'updates', label: t('dashboard.tabs.updatesPanel'), icon: <FiRefreshCw /> },

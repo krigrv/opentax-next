@@ -1,0 +1,50 @@
+{
+  "title": "Regulatory Updates",
+  "description": "Stay informed about the latest tax laws, regulations, and important deadlines",
+  "noUpdates": "No updates found for the selected filter.",
+  "new": "New",
+  
+  "filters": {
+    "all": "All Updates",
+    "tax": "Tax Changes",
+    "legal": "Legal Updates",
+    "deadline": "Deadlines",
+    "feature": "New Features"
+  },
+  
+  "categories": {
+    "tax": "Tax Change",
+    "legal": "Legal Update",
+    "deadline": "Deadline",
+    "feature": "New Feature"
+  },
+  
+  "subscription": {
+    "title": "Stay Updated",
+    "description": "Subscribe to receive email notifications about important tax updates and deadlines.",
+    "button": "Subscribe to Updates"
+  },
+  
+  "mockData": {
+    "update1": {
+      "title": "New Tax Regime Changes for FY 2025-26",
+      "description": "The government has announced modifications to the new tax regime with additional benefits for taxpayers."
+    },
+    "update2": {
+      "title": "Last Date for Filing ITR Extended",
+      "description": "The deadline for filing Income Tax Returns for FY 2024-25 has been extended to August 31, 2025."
+    },
+    "update3": {
+      "title": "New Circular on Section 80D Deductions",
+      "description": "The Income Tax Department has issued a new circular clarifying the scope of medical insurance premium deductions under Section 80D."
+    },
+    "update4": {
+      "title": "AI Tax Assistant Improvements",
+      "description": "We've enhanced our AI Tax Assistant with better responses for complex tax queries and added support for more regional languages."
+    },
+    "update5": {
+      "title": "Guide to New Tax Regime",
+      "description": "A comprehensive guide to help you understand the benefits and limitations of the new tax regime compared to the old one."
+    }
+  }
+}

@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FiHeart, FiX } from 'react-icons/fi';
+import { Heart, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const DonationNotificationBar = () => {
   const { t } = useTranslation('common');
@@ -38,29 +40,31 @@ const DonationNotificationBar = () => {
   }
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-primary-600 text-white px-4 py-2 text-center">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <div className="sticky top-0 z-50 w-full bg-primary text-primary-foreground px-4 py-2 text-center">
+      <div className="container mx-auto flex items-center justify-between">
         <div className="flex-1"></div>
         <div className="flex items-center justify-center">
-          <FiHeart className="mr-2 text-red-300" />
+          <Heart className="mr-2 h-4 w-4 text-red-300" />
           <span>
             {t('donationBar.message')}{' '}
             <Link 
               href="/donate" 
-              className="font-medium underline hover:text-white transition-colors"
+              className="font-medium underline hover:text-primary-foreground/90 transition-colors"
             >
               {t('donationBar.action')}
             </Link>
           </span>
         </div>
         <div className="flex-1 flex justify-end">
-          <button
+          <Button
             onClick={dismissNotification}
-            className="text-white hover:text-gray-200 focus:outline-none"
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 text-primary-foreground hover:text-primary-foreground/90 hover:bg-primary/90"
             aria-label={t('donationBar.dismiss')}
           >
-            <FiX />
-          </button>
+            <X className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </div>
