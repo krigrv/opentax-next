@@ -12,7 +12,20 @@
  */
 
 import axios from 'axios';
-import { load } from 'cheerio';
+import * as cheerio from 'cheerio';
+
+// Add type declaration for cheerio
+declare module 'cheerio' {
+  interface Element {
+    type: string;
+    name: string;
+    attribs: Record<string, string>;
+    children: Element[];
+    parent: Element | null;
+    prev: Element | null;
+    next: Element | null;
+  }
+}
 
 // Types
 export interface TaxUpdate {
@@ -49,7 +62,6 @@ export interface DeductionInfo {
 
 // Constants
 const INCOME_TAX_PORTAL_URL = 'https://www.incometax.gov.in/iec/foportal/';
-const INCOME_TAX_CALCULATOR_URL = 'https://eportal.incometax.gov.in/iec/foservices/#/TaxCalc/calculator';
 
 // Current tax slabs (FY 2024-25)
 // These would ideally be fetched from an API, but we'll hardcode them for now
@@ -162,20 +174,20 @@ export const fetchLatestTaxUpdates = async (): Promise<TaxUpdate[]> => {
     // For now, we'll return mock data based on the latest updates
     const response = await axios.get(INCOME_TAX_PORTAL_URL);
     const html = response.data;
-    const $ = load(html);
+    const $ = cheerio.load(html);
     
     const updates: TaxUpdate[] = [];
     
     // This is a simplified example - in a real implementation,
     // we would need to properly parse the HTML structure
-    $('.latest-updates').each((i, el) => {
-      const date = $(el).find('.date').text();
-      const title = $(el).find('.title').text();
-      const description = $(el).find('.description').text();
-      const link = $(el).find('a').attr('href');
+    $('.latest-updates').each((index: number, element) => {
+      const date = $(element).find('.date').text();
+      const title = $(element).find('.title').text();
+      const description = $(element).find('.description').text();
+      const link = $(element).find('a').attr('href');
       
       updates.push({
-        id: `update-${i}`,
+        id: `update-${index}`,
         date: new Date(date),
         title,
         description,
@@ -213,7 +225,7 @@ export const fetchLatestTaxUpdates = async (): Promise<TaxUpdate[]> => {
 /**
  * Gets the current tax slabs for the specified financial year
  */
-export const getTaxSlabs = (financialYear: string = '2024-25'): TaxSlab[] => {
+export const getTaxSlabs = (_financialYear: string = '2024-25'): TaxSlab[] => {
   // In a real implementation, this would fetch the latest tax slabs from an API
   // For now, we'll return hardcoded values
   return TAX_SLABS_2024_25;
@@ -233,7 +245,6 @@ export const calculateTax = (
   income: number,
   deductions: number = 0,
   regime: 'old' | 'new' = 'new',
-  financialYear: string = '2024-25',
 ): {
   taxableIncome: number;
   incomeTax: number;
@@ -243,10 +254,10 @@ export const calculateTax = (
   effectiveTaxRate: number;
 } => {
   // Get the appropriate tax slabs
-  const taxSlabs = getTaxSlabs(financialYear).find(slab => slab.regime === regime);
+  const taxSlabs = getTaxSlabs('2024-25').find(slab => slab.regime === regime);
   
   if (!taxSlabs) {
-    throw new Error(`Tax slabs not found for regime ${regime} and financial year ${financialYear}`);
+    throw new Error(`Tax slabs not found for regime ${regime} and financial year 2024-25`);
   }
   
   // Calculate taxable income
@@ -298,9 +309,11 @@ export const calculateTax = (
   };
 };
 
-export default {
+const taxInformationService = {
   fetchLatestTaxUpdates,
   getTaxSlabs,
   getDeductions,
   calculateTax,
 };
+
+export default taxInformationService;

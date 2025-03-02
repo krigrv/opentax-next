@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiInfo, FiPlusCircle, FiMinusCircle } from 'react-icons/fi';
+import { FiPlusCircle, FiMinusCircle } from 'react-icons/fi';
 import InfoTooltip from '../common/InfoTooltip';
 import TaxBreakdown from './TaxBreakdown';
 
@@ -69,7 +69,6 @@ const TaxCalculator = () => {
     });
     setDeductions([{ id: 1, type: '80C', amount: '', description: '' }]);
     setTaxResult(null);
-    setError(null);
   };
 
   const addDeduction = () => {
@@ -102,45 +101,6 @@ const TaxCalculator = () => {
     }, 0);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const salary = parseFloat(fields.salary) || 0;
-      const otherIncome = parseFloat(fields.otherIncome) || 0;
-      const totalDeductions = calculateTotalDeductions();
-
-      const response = await fetch('/api/tax-calculator', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          salary,
-          otherIncome,
-          age: parseInt(fields.age),
-          regime: fields.regime,
-          totalDeductions
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(t('errors.calculation'));
-      }
-
-      const result = await response.json();
-      setTaxResult(result);
-    } catch (err) {
-      setError((err as Error).message || t('errors.calculation'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // For demo purposes, we'll calculate tax directly in the component
-  // In a real app, this would be done through the API
   const calculateTaxDirectly = () => {
     setLoading(true);
     setError(null);
@@ -200,7 +160,7 @@ const TaxCalculator = () => {
       // Calculate tax based on slabs
       let tax = 0;
       let remainingIncome = taxableIncome;
-      let taxBreakdown = [];
+      const taxBreakdown = [];
 
       for (let i = 0; i < slabs.length; i++) {
         const currentSlab = slabs[i];
@@ -240,7 +200,7 @@ const TaxCalculator = () => {
       };
 
       setTaxResult(result);
-    } catch (err) {
+    } catch (_error) { // eslint-disable-line @typescript-eslint/no-unused-vars
       setError(t('errors.calculation'));
     } finally {
       setLoading(false);

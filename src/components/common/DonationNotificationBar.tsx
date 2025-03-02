@@ -5,7 +5,6 @@ import { Heart, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 const DonationNotificationBar = () => {
   const { t } = useTranslation('common');

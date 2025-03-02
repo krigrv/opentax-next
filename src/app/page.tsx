@@ -2,7 +2,6 @@
 
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { FiCalendar, FiMessageSquare, FiFolder, FiBell, FiArrowRight } from 'react-icons/fi';
 
 export default function Home() {

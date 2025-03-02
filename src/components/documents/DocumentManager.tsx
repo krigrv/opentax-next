@@ -7,6 +7,7 @@ import {
   FiPlus, FiSearch, FiFilter, FiCalendar, FiFolder
 } from 'react-icons/fi';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
+import Image from 'next/image';
 
 interface Document {
   id: string;
@@ -20,7 +21,7 @@ interface Document {
 
 const DocumentManager = () => {
   const { t } = useTranslation('common');
-  const { preferences, updatePreferences } = useUserPreferences();
+  const { preferences } = useUserPreferences();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState<string>('all');
@@ -30,6 +31,9 @@ const DocumentManager = () => {
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [uploadType, setUploadType] = useState<Document['type']>('other');
   const [uploadYear, setUploadYear] = useState<string>(preferences.taxYear || '2024-25');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [, setIsUploading] = useState(false);
+  const [, setError] = useState<string | null>(null);
 
   // Load documents from local storage
   useEffect(() => {
@@ -38,7 +42,7 @@ const DocumentManager = () => {
       if (savedDocuments) {
         const parsedDocuments = JSON.parse(savedDocuments);
         // Convert string dates back to Date objects
-        const formattedDocuments = parsedDocuments.map((doc: any) => ({
+        const formattedDocuments = parsedDocuments.map((doc: Document) => ({
           ...doc,
           uploadDate: new Date(doc.uploadDate),
         }));
@@ -106,43 +110,61 @@ const DocumentManager = () => {
     setDragActive(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setUploadFile(e.dataTransfer.files[0]);
-      setShowUploadModal(true);
+      setSelectedFiles(Array.from(e.dataTransfer.files));
     }
   };
 
   // Handle file selection
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setUploadFile(e.target.files[0]);
-      setShowUploadModal(true);
-    }
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+    
+    const selectedFile = files[0];
+    const reader = new FileReader();
+    
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (e.target?.result) {
+        // Use the base64String in your application
+        // For example, you could set it to a state variable or process it
+        setSelectedFiles([selectedFile]);
+      }
+    };
+    
+    reader.readAsDataURL(selectedFile);
   };
 
   // Handle document upload
   const handleUpload = async () => {
-    if (!uploadFile) return;
-
-    // Create a preview (in a real app, this would be a proper thumbnail)
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const newDocument: Document = {
-        id: Date.now().toString(),
-        name: uploadFile.name,
-        type: uploadType,
-        size: uploadFile.size,
-        uploadDate: new Date(),
-        taxYear: uploadYear,
-        preview: e.target?.result as string,
-      };
-      
-      setDocuments((prev) => [...prev, newDocument]);
-      setShowUploadModal(false);
-      setUploadFile(null);
-      setUploadType('other');
-    };
-    
-    reader.readAsDataURL(uploadFile);
+    if (selectedFiles.length > 0) {
+      setIsUploading(true);
+      try {
+        for (const file of selectedFiles) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const base64String = event.target?.result as string;
+            const newDocument: Document = {
+              id: crypto.randomUUID(),
+              name: file.name,
+              type: getDocumentTypeFromFile(file.name) || 'other',
+              size: file.size,
+              uploadDate: new Date(),
+              taxYear: preferences.taxYear,
+              preview: base64String,
+            };
+            setDocuments((prevDocuments) => [...prevDocuments, newDocument]);
+          };
+          reader.readAsDataURL(file);
+        }
+        setSelectedFiles([]); // Clear selectedFiles after upload
+      } catch (error) {
+        console.error('Upload failed:', error);
+        setError(t('errors.upload_failed'));
+      } finally {
+        setIsUploading(false);
+      }
+    } else {
+      alert(t('alerts.no_files_selected'));
+    }
   };
 
   // Handle document deletion
@@ -311,9 +333,11 @@ const DocumentManager = () => {
                 {doc.preview && (
                   <div className="h-32 bg-gray-100 rounded mb-2 flex items-center justify-center overflow-hidden">
                     {doc.preview.startsWith('data:image') ? (
-                      <img
+                      <Image
                         src={doc.preview}
                         alt={doc.name}
+                        width={128}
+                        height={128}
                         className="max-h-full max-w-full object-contain"
                       />
                     ) : (
@@ -409,7 +433,7 @@ const DocumentManager = () => {
               </button>
               <button
                 onClick={handleUpload}
-                disabled={!uploadFile}
+                disabled={!selectedFiles.length}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
               >
                 {t('upload')}

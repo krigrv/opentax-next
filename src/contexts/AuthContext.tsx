@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import React from 'react';
 
 // Enhanced security features
 const MAX_LOGIN_ATTEMPTS = 5;
@@ -80,16 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     error: null,
   });
 
-  // Check if the session is expired
-  const isSessionExpired = () => {
-    if (!state.user) return true;
-    
-    const now = Date.now();
-    return now - state.user.lastActive > SESSION_TIMEOUT;
-  };
-
-  // Update the user's last active timestamp
-  const updateLastActive = () => {
+  const updateLastActive = React.useCallback(() => {
     if (state.user) {
       const updatedUser = {
         ...state.user,
@@ -98,102 +90,70 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setState(prev => ({ ...prev, user: updatedUser }));
       localStorage.setItem('user', JSON.stringify(updatedUser));
     }
-  };
+  }, [state.user]);
 
-  // Validate password against security requirements
-  const validatePassword = (password: string): boolean => {
-    return PASSWORD_REGEX.test(password);
-  };
+  const isSessionExpired = React.useCallback(() => {
+    if (!state.user) return true;
+    
+    const now = Date.now();
+    return now - state.user.lastActive > SESSION_TIMEOUT;
+  }, [state.user]);
 
-  // Check authentication status on mount
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check for account lockout
-        const lockoutUntil = localStorage.getItem('lockoutUntil');
-        if (lockoutUntil) {
-          const lockoutTime = parseInt(lockoutUntil, 10);
-          if (Date.now() < lockoutTime) {
-            setState(prev => ({
-              ...prev,
-              accountLocked: true,
-              lockoutUntil: lockoutTime,
-              isLoading: false,
-            }));
-            return;
-          } else {
-            // Lockout period is over
-            localStorage.removeItem('lockoutUntil');
-            localStorage.removeItem('loginAttempts');
-          }
-        }
+  const handleActivity = React.useCallback(() => {
+    if (state.isAuthenticated && state.user) {
+      updateLastActive();
+    }
+  }, [state.isAuthenticated, state.user, updateLastActive]);
 
-        // Check for stored user
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          
-          // Check if session is expired
-          if (Date.now() - user.lastActive > SESSION_TIMEOUT) {
-            // Session expired, log out
-            localStorage.removeItem('user');
-            setState(prev => ({
-              ...prev,
-              isLoading: false,
-              error: 'Session expired. Please log in again.',
-            }));
-          } else {
-            // Valid session
-            setState(prev => ({
-              ...prev,
-              user,
-              isAuthenticated: true,
-              isLoading: false,
-            }));
-            
-            // Update last active time
-            updateLastActive();
-          }
-        } else {
-          setState(prev => ({ ...prev, isLoading: false }));
-        }
-      } catch (error) {
-        console.error('Authentication error:', error);
-        setState(prev => ({ ...prev, isLoading: false, error: 'Authentication error' }));
+  const checkAuth = React.useCallback(async () => {
+    setState(prev => ({ ...prev, isLoading: true, error: null }));
+    try {
+      const storedAuth = localStorage.getItem('authToken');
+      const storedUser = localStorage.getItem('user');
+      if (storedAuth && storedUser) {
+        const parsedUser = JSON.parse(storedUser) as User;
+        setState(prev => ({
+          ...prev,
+          user: parsedUser,
+          isAuthenticated: true,
+          isLoading: false,
+        }));
+        updateLastActive();
+      } else {
+        setState(prev => ({ ...prev, isLoading: false, isAuthenticated: false }));
       }
-    };
+    } catch (error) {
+      console.error('Authentication check failed:', error);
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: 'Failed to check authentication status.',
+        isAuthenticated: false,
+      }));
+    }
+  }, [updateLastActive]);
 
+  useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
-  // Set up activity tracking
   useEffect(() => {
     if (state.isAuthenticated) {
-      const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
-      
-      const handleActivity = () => {
-        updateLastActive();
-      };
-      
-      events.forEach(event => {
-        window.addEventListener(event, handleActivity);
-      });
-      
-      // Check session expiration periodically
-      const intervalId = setInterval(() => {
-        if (isSessionExpired()) {
-          logout();
-        }
-      }, 60000); // Check every minute
-      
-      return () => {
-        events.forEach(event => {
-          window.removeEventListener(event, handleActivity);
-        });
-        clearInterval(intervalId);
-      };
+      handleActivity();
+      const intervalId = setInterval(handleActivity, 60000); // Update every minute
+
+      return () => clearInterval(intervalId);
     }
-  }, [state.isAuthenticated]);
+  }, [state.isAuthenticated, handleActivity]);
+
+  useEffect(() => {
+    if (state.isAuthenticated) {
+      if (isSessionExpired()) {
+        logout();
+        // Optionally redirect to login or show a message
+      }
+    }
+  }, [state.isAuthenticated, logout, isSessionExpired]);
 
   const login = async (credentials: LoginCredentials) => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
@@ -360,15 +320,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const logout = () => {
+  const logout = React.useCallback(() => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
     setState(prev => ({
       ...prev,
       user: null,
       isAuthenticated: false,
       requiresTwoFactor: false,
     }));
-    localStorage.removeItem('user');
-  };
+  }, []);
 
   const register = async (credentials: RegisterCredentials) => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
@@ -478,6 +439,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }));
       return false;
     }
+  };
+
+  const validatePassword = (password: string): boolean => {
+    return PASSWORD_REGEX.test(password);
   };
 
   const value = {

@@ -55,7 +55,7 @@ const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
       <button
         type="button"
         role="switch"
-        aria-pressed={pressed}
+        aria-checked={pressed}
         data-state={pressed ? "on" : "off"}
         ref={ref}
         onClick={handleClick}

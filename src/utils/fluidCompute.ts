@@ -80,7 +80,7 @@ export function detectCapabilities(): ComputeCapabilities {
   let networkQuality: 'poor' | 'adequate' | 'good' = 'adequate';
   
   if (navigator.connection) {
-    const connection = navigator.connection as any;
+    const connection = navigator.connection as NetworkInformation;
     if (connection.effectiveType === '4g' || connection.downlink > 5) {
       networkQuality = 'good';
     } else if (connection.effectiveType === '2g' || connection.downlink < 1) {
@@ -337,23 +337,20 @@ function generateCacheKey<T>(input: T, options: FluidComputeOptions): string {
   return `${JSON.stringify(input)}_${options.precision}`;
 }
 
-/**
- * Formats a number with adaptive precision based on device capabilities
- * @param value The number to format
- * @param options Formatting options
- * @returns Formatted number string
- */
-export function formatWithAdaptivePrecision(
-  value: number,
-  options: {
+interface FormatNumberOptions {
     style?: 'decimal' | 'currency' | 'percent';
     currency?: string;
     minimumFractionDigits?: number;
     maximumFractionDigits?: number;
     deviceTier?: DeviceTier;
-  } = {}
+  }
+
+export function formatWithAdaptivePrecision(
+  value: number,
+  options: FormatNumberOptions = {}
 ): string {
-  const deviceTier = options.deviceTier || 'medium';
+  const { style = 'decimal', currency = 'INR', minimumFractionDigits = 0, deviceTier: optionDeviceTier } = options;
+  const deviceTier = optionDeviceTier || 'medium';
   
   // Adjust precision based on device tier
   let maxFractionDigits = options.maximumFractionDigits;
@@ -362,9 +359,9 @@ export function formatWithAdaptivePrecision(
   }
   
   return new Intl.NumberFormat('en-IN', {
-    style: options.style || 'decimal',
-    currency: options.currency || 'INR',
-    minimumFractionDigits: options.minimumFractionDigits || 0,
+    style: style || 'decimal',
+    currency: currency || 'INR',
+    minimumFractionDigits: minimumFractionDigits || 0,
     maximumFractionDigits: maxFractionDigits
   }).format(value);
 }

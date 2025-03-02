@@ -3,6 +3,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { ChevronDown } from "lucide-react"
+import { Select as SelectPrimitive } from "@/components/ui/select"
 
 interface SelectProps {
   children: React.ReactNode
@@ -75,32 +76,24 @@ interface SelectTriggerProps {
   children: React.ReactNode
 }
 
-const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
-  ({ className, children, ...props }, ref) => {
-    const { open, setOpen, disabled } = React.useContext(SelectContext)
-    
-    return (
-      <button
-        type="button"
-        role="combobox"
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        disabled={disabled}
-        className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        onClick={() => setOpen(!open)}
-        ref={ref}
-        {...props}
-      >
-        {children}
-        <ChevronDown className="h-4 w-4 opacity-50" />
-      </button>
-    )
-  }
-)
-SelectTrigger.displayName = "SelectTrigger"
+const SelectTrigger = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+>(({ className, children, ...props }, _ref) => (
+  <SelectPrimitive.Trigger
+    className={cn(
+      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <SelectPrimitive.Icon asChild>
+      <ChevronDown className="h-4 w-4 opacity-50" />
+    </SelectPrimitive.Icon>
+  </SelectPrimitive.Trigger>
+))
+SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 interface SelectValueProps {
   placeholder?: string
@@ -128,32 +121,39 @@ interface SelectContentProps {
 const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
   ({ className, children }, ref) => {
     const { open, setOpen } = React.useContext(SelectContext)
-    
-    if (!open) return null
-    
-    // Close dropdown when clicking outside
+    const contentRef = React.useRef(null)
+    const contentId = React.useId();
+
     React.useEffect(() => {
       const handleOutsideClick = (event: MouseEvent) => {
-        if (ref.current && !ref.current.contains(event.target as Node)) {
+        if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
           setOpen(false)
         }
       }
-      
-      document.addEventListener('mousedown', handleOutsideClick)
+
+      if (open) {
+        document.addEventListener('mousedown', handleOutsideClick)
+      } else {
+        document.removeEventListener('mousedown', handleOutsideClick)
+      }
+
       return () => {
         document.removeEventListener('mousedown', handleOutsideClick)
       }
-    }, [ref, setOpen])
-    
+    }, [open, setOpen])
+
+    if (!open) return null
+
     return (
       <div
-        ref={ref}
+        ref={contentRef}
         className={cn(
           "absolute z-50 min-w-[8rem] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
           "mt-1 max-h-60 overflow-auto",
           className
         )}
         role="listbox"
+        id={contentId}
       >
         <div className="p-1">
           {children}

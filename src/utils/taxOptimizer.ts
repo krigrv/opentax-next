@@ -21,25 +21,13 @@ interface OptimizationSuggestion {
   complexity: number; // 0-100 score
 }
 
-interface TaxResult {
-  taxableIncome: number;
-  incomeTax: number;
-  cess: number;
-  surcharge: number;
-  totalTax: number;
-  effectiveRate: number;
-  standardDeduction?: number;
-}
-
 /**
  * Generates tax optimization suggestions based on the user's tax input and calculated result
  * @param taxInput The user's tax input data
- * @param taxResult The calculated tax result
  * @returns Array of optimization suggestions
  */
 export async function generateOptimizationSuggestions(
-  taxInput: TaxInput,
-  taxResult: TaxResult
+  taxInput: TaxInput
 ): Promise<OptimizationSuggestion[]> {
   const suggestions: OptimizationSuggestion[] = [];
   const { income, deductions, regime, isSalaried } = taxInput;

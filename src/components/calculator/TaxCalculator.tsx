@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { detectSkew, normalizeTaxComponents, validateTaxCalculation } from '@/utils/skewProtection';
 import { fluidCalculate, formatWithAdaptivePrecision } from '@/utils/fluidCompute';
 import { generateOptimizationSuggestions } from '@/utils/taxOptimizer';
-import { FiInfo, FiArrowRight, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiInfo, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 interface TaxInput {
   income: number;
@@ -75,7 +75,7 @@ const TaxCalculator = () => {
     try {
       // Use fluid compute for adaptive calculations
       const taxResult = await fluidCalculate(
-        async (input: TaxInput, options) => {
+        async (input: TaxInput) => {
           setCalculationProgress(30);
           const { income, deductions, regime, isSalaried } = input;
           

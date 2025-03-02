@@ -48,7 +48,7 @@ const Dashboard = () => {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as unknown)}
             className={`flex items-center px-4 py-2 text-sm font-medium border-b-2 -mb-px ${
               activeTab === tab.id
                 ? 'border-indigo-600 text-indigo-600'
@@ -94,7 +94,7 @@ const Dashboard = () => {
           >
             <h3 className="font-medium text-indigo-600 mb-1">Official Tax Calculator</h3>
             <p className="text-sm text-gray-600">
-              Use the Income Tax Department's official calculator for precise tax calculations.
+              Use the Income Tax Department&apos;s official calculator for precise tax calculations.
             </p>
           </a>
         </div>

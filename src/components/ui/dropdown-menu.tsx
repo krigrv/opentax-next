@@ -31,13 +31,12 @@ const DropdownMenu = ({ children, className }: DropdownMenuProps) => {
 interface DropdownMenuTriggerProps {
   children: React.ReactNode
   className?: string
-  asChild?: boolean
 }
 
 const DropdownMenuTrigger = React.forwardRef<
   HTMLButtonElement,
   DropdownMenuTriggerProps & React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ children, className, asChild = false, ...props }, ref) => {
+>(({ children, className, ...props }, ref) => {
   const { open, setOpen } = React.useContext(DropdownMenuContext)
 
   return (

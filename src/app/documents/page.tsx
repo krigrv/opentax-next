@@ -1,15 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FiFolder, FiInfo } from 'react-icons/fi';
 import DocumentManager from '@/components/documents/DocumentManager';
-import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 
 export default function DocumentsPage() {
-  const { t } = useTranslation('common');
-  const { preferences } = useUserPreferences();
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-6">

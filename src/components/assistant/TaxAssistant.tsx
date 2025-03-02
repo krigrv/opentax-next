@@ -55,11 +55,11 @@ const TaxAssistant = () => {
       if (savedMessages) {
         const parsedMessages = JSON.parse(savedMessages);
         // Convert string timestamps back to Date objects
-        const formattedMessages = parsedMessages.map((msg: any) => ({
+        const formattedMessages = parsedMessages.map((msg: Message) => ({
           ...msg,
           timestamp: new Date(msg.timestamp),
         }));
-        setMessages(formattedMessages);
+        setMessages(formattedMessages as Message[]);
       }
     } catch (error) {
       console.error('Failed to load messages from localStorage:', error);

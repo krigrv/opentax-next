@@ -7,6 +7,7 @@ import {
   FiFilter, FiSearch, FiChevronDown, FiChevronUp 
 } from 'react-icons/fi';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
+import { fetchLatestTaxUpdates, TaxUpdate } from '@/services/taxInformationService';
 
 interface Update {
   id: string;
@@ -29,86 +30,27 @@ const RegulatoryUpdates = () => {
   const [expandedUpdates, setExpandedUpdates] = useState<string[]>([]);
   const [bookmarkedOnly, setBookmarkedOnly] = useState(false);
   const [unreadOnly, setUnreadOnly] = useState(false);
+  const [, setIsLoading] = useState(false);
+  const [, setError] = useState<string | null>(null);
 
-  // Load mock updates (in a real app, this would come from an API)
   useEffect(() => {
-    // Try to load from localStorage first
-    try {
-      const savedUpdates = localStorage.getItem('opentax-regulatory-updates');
-      if (savedUpdates) {
-        const parsedUpdates = JSON.parse(savedUpdates);
-        // Convert string dates back to Date objects
-        const formattedUpdates = parsedUpdates.map((update: any) => ({
+    const loadUpdates = async () => {
+      setIsLoading(true);
+      try {
+        const updatesData: TaxUpdate[] = await fetchLatestTaxUpdates();
+        setUpdates(updatesData.map((update) => ({
           ...update,
           date: new Date(update.date),
-        }));
-        setUpdates(formattedUpdates);
-        return;
+        })));
+      } catch (error) {
+        console.error('Failed to fetch regulatory updates:', error);
+        setError(t('errors.updates_fetch_failed'));
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load updates from localStorage:', error);
-    }
+    };
 
-    // If nothing in localStorage, load mock data
-    const mockUpdates: Update[] = [
-      {
-        id: '1',
-        title: t('update_title_1'),
-        description: t('update_description_1'),
-        date: new Date(2025, 1, 15),
-        source: 'Income Tax Department',
-        sourceUrl: 'https://incometaxindia.gov.in',
-        category: 'tax',
-        isBookmarked: false,
-        isRead: false,
-      },
-      {
-        id: '2',
-        title: t('update_title_2'),
-        description: t('update_description_2'),
-        date: new Date(2025, 1, 10),
-        source: 'Ministry of Finance',
-        sourceUrl: 'https://finmin.nic.in',
-        category: 'policy',
-        isBookmarked: false,
-        isRead: false,
-      },
-      {
-        id: '3',
-        title: t('update_title_3'),
-        description: t('update_description_3'),
-        date: new Date(2025, 1, 5),
-        source: 'CBDT',
-        sourceUrl: 'https://incometaxindia.gov.in',
-        category: 'deadline',
-        isBookmarked: false,
-        isRead: false,
-      },
-      {
-        id: '4',
-        title: t('update_title_4'),
-        description: t('update_description_4'),
-        date: new Date(2025, 0, 28),
-        source: 'Supreme Court of India',
-        sourceUrl: 'https://main.sci.gov.in',
-        category: 'court',
-        isBookmarked: false,
-        isRead: false,
-      },
-      {
-        id: '5',
-        title: t('update_title_5'),
-        description: t('update_description_5'),
-        date: new Date(2025, 0, 20),
-        source: 'GST Council',
-        sourceUrl: 'https://gstcouncil.gov.in',
-        category: 'compliance',
-        isBookmarked: false,
-        isRead: false,
-      },
-    ];
-    
-    setUpdates(mockUpdates);
+    loadUpdates();
   }, [t]);
 
   // Save updates to local storage when they change
